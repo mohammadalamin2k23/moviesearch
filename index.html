@@ -1,0 +1,87 @@
+<!doctype html>
+
+<head>
+  
+  <body>
+    
+
+<link href="https://fonts.googleapis.com/css?family=Orbitron|Text+Me+One" rel="stylesheet" /><style>body{font-family:'Text Me One',sans-serif ;}</style><link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="style.css">
+<script src="script.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&amp;display=swap" rel="stylesheet" />
+<header>
+  
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&amp;display=swap" rel="stylesheet" />
+
+<header>
+  <h1 class="brand">
+    <a href="#">Movie Search</a>
+  </h1>
+  <input type="text" id="searchInput" class="search" placeholder="Search" />
+</header>
+<main id="main"></main>
+
+  
+ 
+</header>
+
+<main id="searchResults"></main>
+    
+
+
+    
+<script>const searchInput = document.getElementById('searchInput');
+const searchResults = document.getElementById('searchResults');
+
+// Event listener for the search input
+searchInput.addEventListener('input', function() {
+  const query = this.value.trim();
+
+  // Clear previous search results
+  searchResults.innerHTML = '';
+
+  // Make API request and display the results
+  if (query !== '') {
+    const apiEndpoint = `https://api.themoviedb.org/3/search/movie?api_key=657cb157a7fd6debbacfbe852148213d&query=${encodeURIComponent(query)}`;
+    fetch(apiEndpoint)
+      .then(response => response.json())
+      .then(data => {
+        // Process the API response and display the results
+        displayResults(data.results);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
+});
+
+// Function to display the search results
+function displayResults(results) {
+  results.forEach(result => {
+    const movieItem = document.createElement('div');
+    movieItem.classList.add('movie');
+
+    const posterPath = result.poster_path
+      ? `https://image.tmdb.org/t/p/w500${result.poster_path}`
+      : 'no-poster.jpg';
+
+    movieItem.innerHTML = `
+      <img src="${posterPath}" alt="${result.title}">
+      <div class="movie-info">
+        <h2>${result.title}</h2>
+        <span class="vote">${result.vote_average}</span>
+        <p class="overview">${result.overview}</p>
+      </div>
+    `;
+
+    searchResults.appendChild(movieItem);
+  });
+}
+</script>
+
+
+
